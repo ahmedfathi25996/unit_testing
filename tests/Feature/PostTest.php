@@ -27,7 +27,9 @@ class PostTest extends TestCase
         $user = factory(User::class)->create();
         $post = factory(Post::class)->create();
         $response = $this->actingAs($user,"api")->get("/api/posts/1000");
-        $response->assertStatus(404);
+        $response->assertStatus(404)->assertJson([
+        'message' => "this post not exist",
+    ]);
     }
 
     public function test_get_single_post()
@@ -35,7 +37,10 @@ class PostTest extends TestCase
         $user = factory(User::class)->create();
         $post = factory(Post::class)->create();
         $response = $this->actingAs($user,"api")->get("/api/posts/$post->id");
-        $response->assertStatus(200);
+        $response->assertStatus(200)->assertJson([
+            "title" => $post->title,
+            "body" => $post->body
+        ]);
 
     }
 
@@ -44,7 +49,10 @@ class PostTest extends TestCase
         $post     = factory(Post::class)->create();
         $user     = factory(User::class)->create();
         $response = $this->actingAs($user,"api")->post("api/posts",$post->toArray());
-        $response->assertStatus(201);
+        $response->assertStatus(201)->assertJson([
+            "title" => $post->title,
+            "body" => $post->body
+        ]);
     }
 
     public function test_update_post()
@@ -60,7 +68,9 @@ class PostTest extends TestCase
         ];
 
         $response = $this->actingAs($user,"api")->put("api/posts/$post->id",$arr);
-        $response->assertStatus(201);
+        $response->assertStatus(201)->assertJson([
+            "message" => "updated successfully"
+        ]);
     }
 
     public function test_delete_post()

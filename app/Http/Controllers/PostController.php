@@ -21,7 +21,8 @@ class PostController extends BaseController
        $post =  Post::find($post_id);
        if(!is_object($post))
        {
-           return response()->json("this post not exist",404);
+           $msg = ["message" => "this post not exist"];
+           return response()->json($msg,404);
        }
        return response()->json($post,200);
     }
@@ -37,10 +38,12 @@ class PostController extends BaseController
         $post = Post::find($post_id);
         if(!is_object($post))
         {
-            return response()->json("this post not exist",404);
+            $msg = ["message" => "this post not exist"];
+            return response()->json($msg,404);
         }
         $post = $post->update($request->all());
-        return response()->json($post, 201);
+        $msg = ["message" => "updated successfully"];
+        return response()->json($msg, 201);
 
     }
 
@@ -49,9 +52,11 @@ class PostController extends BaseController
         $post = Post::find($post_id);
         if(!is_object($post))
         {
-            return response()->json("this post not exist",404);
+            $msg = ["message" => "this post not exist"];
+            return response()->json($msg,404);
         }
         $post->delete();
-        return response()->json(null, 204);
+        $msg = ["message" => "deleted successfully"];
+        return response()->json($msg, 204);
     }
 }
