@@ -29,6 +29,10 @@ class PostController extends BaseController
 
     public function save_post(Request $request)
     {
+        $request->validate([
+           "title" => "required",
+           "body" => "required"
+        ]);
         $post = Post::create($request->all());
         return response()->json($post, 201);
     }

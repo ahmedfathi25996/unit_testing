@@ -17,7 +17,7 @@ class PostTest extends TestCase
     {
         $user = factory(User::class)->create();
         factory(Post::class)->create();
-        $this->actingAs($user,"api");
+        $this->actingAs($user, "api");
         $this->get("api/posts")->assertStatus(200);
 
     }
@@ -25,24 +25,33 @@ class PostTest extends TestCase
     public function test_post_not_exist()
     {
         $user = factory(User::class)->create();
-        $post = factory(Post::class)->create();
-        $response = $this->actingAs($user,"api")->get("/api/posts/1000");
+        factory(Post::class)->create();
+        $response = $this->actingAs($user, "api")->get("/api/posts/1000");
         $response->assertStatus(404)->assertJson([
-        'message' => "this post not exist",
-    ]);
+            'message' => "this post not exist",
+        ]);
     }
 
     public function test_get_single_post()
     {
         $user = factory(User::class)->create();
         $post = factory(Post::class)->create();
-        $response = $this->actingAs($user,"api")->get("/api/posts/$post->id");
+        $response = $this->actingAs($user, "api")->get("/api/posts/$post->id");
         $response->assertStatus(200)->assertJson([
             "title" => $post->title,
             "body" => $post->body
         ]);
 
     }
+
+    public function test_post_require_title_validation(){
+
+        $post     = ["title" => ""];
+        $user     = factory(User::class)->create();
+        $this->actingAs($user,"api")->post("api/posts",$post)->assertSessionHasErrors('title');
+    }
+
+
 
     public function test_create_new_post()
     {
