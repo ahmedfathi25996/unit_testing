@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller as BaseController;
 
 class PostController extends BaseController
 {
-    dd("here");
+
     public function get_all()
     {
        $posts = Post::all();
