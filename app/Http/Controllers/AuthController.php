@@ -11,7 +11,7 @@ class AuthController extends BaseController
 
     function login(Request $request)
     {
-        dd("here again");
+        
         $data = $request->all();
         $request->validate([
            "email" => "required",
